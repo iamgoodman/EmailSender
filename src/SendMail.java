@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.mail.Authenticator;
@@ -32,7 +33,8 @@ public class SendMail {
 	
 	//send email variable
     final String userName ="marketing@grille4u.com";
-    final String password="";
+    //np
+    final String password="***"; 
    public static ArrayList emails = new ArrayList();
     
     
@@ -111,7 +113,9 @@ public class SendMail {
        }
  
      /*   new SendMail(emails);*/
-       new SendMail();
+       
+       
+      /* new SendMail();*/
     }
 
     public SendMail(/*ArrayList l*/){
@@ -143,7 +147,7 @@ public class SendMail {
 
             message.setFrom(new InternetAddress("marketing@grille4u.com"));
             message.setRecipients(Message.RecipientType.TO,
-                                 /* InternetAddress.parse(emails.get(i).toString()));*/
+                                
                                   InternetAddress.parse("joey@apsautoparts.com"));
           /*  message.setSubject("Nice Photo for $15 Cash");*/
             /*message.setContent("<h:body>Thank you for purchasing from automaxstyling on ebay<br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better. <br></body>","text/html;     charset=utf-8");*/
@@ -153,7 +157,7 @@ public class SendMail {
            
             
             //set message body of email
-            String s = "<h:body>Thank you for purchasing from automaxstyling on ebay.<br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better. <br></body>";
+            String s = "<h:body>Dear Customer:<br><br><br>Thank you for purchasing from automaxstyling on ebay.<br><br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br><br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better.<br><br> Please follow the sample pictures below, and reply via this email to send your photo to us<br><br>Thank you very much!<br><br><br>AutomaxStyling From Ebay</body>";
      
           
             
@@ -206,8 +210,14 @@ public class SendMail {
             
             
         }catch(MessagingException
+        		
                messageException){
+        	
+        	
             throw new RuntimeException(messageException);
+            
+            
+            
         }
 
  /*   }*/
