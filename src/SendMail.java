@@ -3,9 +3,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
+
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.mail.Authenticator;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.*;
@@ -14,6 +19,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.nio.DataSource;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
@@ -26,7 +32,7 @@ public class SendMail {
 	
 	//send email variable
     final String userName ="marketing@grille4u.com";
-    final String password="***";
+    final String password="";
    public static ArrayList emails = new ArrayList();
     
     
@@ -127,14 +133,74 @@ public class SendMail {
         {*/
         
         try{
+        	
+        	
+        	
+        	//send email
+        	
+        	
             Message message = new MimeMessage(session);
 
             message.setFrom(new InternetAddress("marketing@grille4u.com"));
             message.setRecipients(Message.RecipientType.TO,
                                  /* InternetAddress.parse(emails.get(i).toString()));*/
                                   InternetAddress.parse("joey@apsautoparts.com"));
-            message.setSubject("Nice Photo for $15 Cash");
-            message.setContent("<h:body>Thank you for purchasing from automaxstyling on ebay<br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better. <br></body>","text/html;     charset=utf-8");
+          /*  message.setSubject("Nice Photo for $15 Cash");*/
+            /*message.setContent("<h:body>Thank you for purchasing from automaxstyling on ebay<br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better. <br></body>","text/html;     charset=utf-8");*/
+            
+            
+            message.setSubject("Photo for $15 Partial Refund!! ");
+           
+            
+            //set message body of email
+            String s = "<h:body>Thank you for purchasing from automaxstyling on ebay.<br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better. <br></body>";
+     
+          
+            
+            //set boy part of the email
+            MimeBodyPart messageBodyPart = new MimeBodyPart();
+            
+      
+            
+        	// Fill the message
+			messageBodyPart.setText(s);
+			messageBodyPart.setContent(s, "text/html");
+            
+            
+            
+	        //set attachment part of the email
+            MimeBodyPart attachmentpart = new MimeBodyPart();
+            
+            
+            
+            String file = "c:\\expic.jpg";
+            String fileName = "attachmentName";
+            FileDataSource source = new FileDataSource(file);
+            
+            
+            attachmentpart.setDataHandler(new DataHandler(source));
+            attachmentpart.setFileName(fileName);
+        
+            
+            //use multipart to append both message and attachment
+			
+            Multipart multipart = new MimeMultipart();
+            
+
+        
+            
+            multipart.addBodyPart(attachmentpart);
+           
+            multipart.addBodyPart(messageBodyPart);
+            
+            
+
+            message.setContent(multipart);
+            
+            
+       
+            
+            
             Transport.send(message);
             System.out.println("Done");
             
@@ -145,6 +211,12 @@ public class SendMail {
         }
 
  /*   }*/
+        
+        
+        
     }
 
+    
+    
+    
 }
