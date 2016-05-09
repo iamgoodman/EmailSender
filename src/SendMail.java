@@ -41,17 +41,24 @@ public class SendMail {
     
     //np
     
-    final String password="nicephoto"; 
+    final String password="****"; 
     
-    //arraylist to store emails with emailid and customer id
+    //arraylist to store emails with emailid , customer id , invoice #
    public static ArrayList emails = new ArrayList();
     
-   //arraylist to store emails only in emails bundle for testing
-   public static ArrayList emailid = new ArrayList<String>();
+   //arraylist to store invoice # in customers bundle 
+   public static ArrayList invoice = new ArrayList<String>();
    
-   //arraylist to store customerid only in customers bundle for testing
+
+
+   
+   //arraylist to store customerid only in customers bundle 
    public static ArrayList customerid = new ArrayList<String>();
    
+    
+   /*      //arraylist to store emails only in emails bundle for testing
+   public static ArrayList emailid = new ArrayList<String>();
+   */
    
    
    
@@ -135,18 +142,35 @@ public class SendMail {
     	   
     	   emails.add(excelData.get(i).toString().substring(1, excelData.get(i).toString().length()-1));
     	   
+    	 System.out.println(emails.get(i));
+    	   
+    	   
+    	/*  emailid.add(emails.get(i).toString().substring(0,emails.get(i).toString().indexOf(",")));
+    	   
+    	   customerid.add( emails.get(i).toString().substring(emails.get(i).toString().indexOf(",")+1));*/
+    	   
     	 
+    	 //add the remaing part in the string into a array list named invoice
+    	   invoice.add(  emails.get(i).toString().split(",") [2]  );
+    	   
+    	   //get the customer id to customerid list, added to customer id list
+    	   customerid.add(emails.get(i).toString().split(",")[1]);
+       }
+       
+       
+    /*   //removing trailing 0 s in the invoice string, reduce running time avoided iteration of list
+       for (int i = 0; i < invoice.size(); i++)
+       {
     	   
     	   
-    	  emailid.add(emails.get(i).toString().substring(0,emails.get(i).toString().indexOf(",")));
     	   
-    	   customerid.add( emails.get(i).toString().substring(emails.get(i).toString().indexOf(",")+1));
+    	   System.out.println(invoice.get(i).toString().indexOf(".") < 0 ? invoice.get(i).toString() :invoice.get(i).toString().replaceAll("0*$", "").replaceAll("\\.$", "") );
     	   
     	   
        }
        
-
-    	   for(int i = 0; i<emailid.size(); i++)
+*/
+    	  /* for(int i = 0; i<emailid.size(); i++)
     		   
     	   {
     		   
@@ -155,9 +179,9 @@ public class SendMail {
     		   System.out.println(emailid.get(i));
     		   
     		   
-    	   }
+    	   }*/
        
-
+/*
 	   for(int i = 0; i<customerid.size(); i++)
     		   
     	   {
@@ -168,7 +192,7 @@ public class SendMail {
     		   
     		   
     	   }
-       
+       */
     	   
     
        
@@ -179,7 +203,7 @@ public class SendMail {
      
     }
 
-    public SendMail(ArrayList l){
+    public SendMail(ArrayList emailss){
     	
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
@@ -197,8 +221,12 @@ public class SendMail {
         //send  a list of emails in the arraylist emails
 
       for(int i = 0; i< emails.size();i++)
+    	  
         {
-        
+    	  
+    
+    		  
+    	  
         try{
         	
         	
@@ -210,20 +238,22 @@ public class SendMail {
 
             message.setFrom(new InternetAddress("marketing@grille4u.com"));
             message.setRecipients(Message.RecipientType.TO,
-                                
-                                  InternetAddress.parse(emails.get(i).toString().substring(0,emails.get(i).toString().indexOf(","))));
-          /*  message.setSubject("Nice Photo for $15 Cash");*/
-            /*message.setContent("<h:body>Thank you for purchasing from automaxstyling on ebay<br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better. <br></body>","text/html;     charset=utf-8");*/
+                 
+                 InternetAddress.parse(emails.get(i).toString().substring(0,emails.get(i).toString().indexOf(","))));
+       
+            //set title message, remove the trailing zeroes of invoice list
             
+            String emailtitlemessage = String.format("Nice Photo for $15 Partial Refund Ebay Invoice # %s ", 
+            		invoice.get(i).toString().indexOf(".") < 0 ? invoice.get(i).toString() :invoice.get(i).toString().replaceAll("0*$", "").replaceAll("\\.$", ""));
             
-            message.setSubject("Photo for $15 Partial Refund!! ");
+            message.setSubject(emailtitlemessage);
            
             
-            //set message body of email
-            String s = String.format("<h:body>Dear %s <br><br><br>Thank you for purchasing from automaxstyling on ebay.<br><br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br><br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better.<br><br> Please follow the sample pictures below, and reply via this email to send your photo to us<br><br>Thank you very much!"
-            		+ "<br><br><br>AutomaxStyling From Ebay</body>", emails.get(i).toString().substring(emails.get(i).toString().indexOf(",")+1) );
+            //set message body of email, make a part of message bold and red
+            String bodymessageinput = String.format("<h:body>Dear %s <br><br><br>Thank you for purchasing from automaxstyling on ebay.<br><br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br><br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better.<br><br><b><i><font color=\"red\"> Please follow the sample pictures in the attachment below, and reply via this email to send your photo to us</font></i></b><br><br>Thank you very much!"
+            		+ "<br><br><br>AutomaxStyling From Ebay</body>", customerid.get(i) );
      
-          
+           /* emails.get(i).toString().substring(emails.get(i).toString().indexOf(",")+1*/
             
             //set boy part of the email
             MimeBodyPart messageBodyPart = new MimeBodyPart();
@@ -231,8 +261,8 @@ public class SendMail {
       
             
         	// Fill the message
-			messageBodyPart.setText(s);
-			messageBodyPart.setContent(s, "text/html");
+			messageBodyPart.setText(bodymessageinput);
+			messageBodyPart.setContent(bodymessageinput, "text/html");
             
             
             
@@ -286,9 +316,9 @@ public class SendMail {
 
     }
         
+        }
         
-        
-    }
+    
 
     
     
