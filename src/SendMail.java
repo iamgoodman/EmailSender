@@ -2,6 +2,8 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 
@@ -28,29 +30,47 @@ import javax.mail.PasswordAuthentication;
 
 
 public class SendMail {
+	
+	
+
 
 
 	
 	//send email variable
     final String userName ="marketing@grille4u.com";
+    
     //np
-    final String password="***"; 
+    
+    final String password="nicephoto"; 
+    
+    //arraylist to store emails with emailid and customer id
    public static ArrayList emails = new ArrayList();
     
-    
+   //arraylist to store emails only in emails bundle for testing
+   public static ArrayList emailid = new ArrayList<String>();
+   
+   //arraylist to store customerid only in customers bundle for testing
+   public static ArrayList customerid = new ArrayList<String>();
+   
+   
+   
+   
     public static void main(String[] args) {
     	
 
     	//To read input ASINs as excel formatt and parse into java, stored as arrayList
     	
     	 // Location of the source file
-       String sourceFilePath = "c:\\email1.xls";
+       String sourceFilePath = "c:\\email4.xls";
          
        FileInputStream fileInputStream = null;
          
        // Array List to store the excel sheet data
        ArrayList excelData = new ArrayList();
+       
+
          
+       //A more robust importing method for importing excel data to arrays
        try {
              
            // FileInputStream to read the excel file
@@ -103,6 +123,11 @@ public class SendMail {
 			}
            }
        }
+       
+       
+   
+    
+       //remove the curl brackets in the exceldata arraylist.
        for(int i = 0; i <excelData.size();i++)	
     		
     		
@@ -110,15 +135,51 @@ public class SendMail {
     	   
     	   emails.add(excelData.get(i).toString().substring(1, excelData.get(i).toString().length()-1));
     	   
+    	 
+    	   
+    	   
+    	  emailid.add(emails.get(i).toString().substring(0,emails.get(i).toString().indexOf(",")));
+    	   
+    	   customerid.add( emails.get(i).toString().substring(emails.get(i).toString().indexOf(",")+1));
+    	   
+    	   
        }
+       
+
+    	   for(int i = 0; i<emailid.size(); i++)
+    		   
+    	   {
+    		   
+    		   
+    		   
+    		   System.out.println(emailid.get(i));
+    		   
+    		   
+    	   }
+       
+
+	   for(int i = 0; i<customerid.size(); i++)
+    		   
+    	   {
+    		   
+    		   
+    		   
+    		   System.out.println(customerid.get(i));
+    		   
+    		   
+    	   }
+       
+    	   
+    
+       
  
-     /*   new SendMail(emails);*/
+       new SendMail(emails);
        
        
-      /* new SendMail();*/
+     
     }
 
-    public SendMail(/*ArrayList l*/){
+    public SendMail(ArrayList l){
     	
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
@@ -132,9 +193,11 @@ public class SendMail {
             }
 
         });
+        
+        //send  a list of emails in the arraylist emails
 
-/*      for(int i = 0; i< emails.size();i++)
-        {*/
+      for(int i = 0; i< emails.size();i++)
+        {
         
         try{
         	
@@ -148,7 +211,7 @@ public class SendMail {
             message.setFrom(new InternetAddress("marketing@grille4u.com"));
             message.setRecipients(Message.RecipientType.TO,
                                 
-                                  InternetAddress.parse("joey@apsautoparts.com"));
+                                  InternetAddress.parse(emails.get(i).toString().substring(0,emails.get(i).toString().indexOf(","))));
           /*  message.setSubject("Nice Photo for $15 Cash");*/
             /*message.setContent("<h:body>Thank you for purchasing from automaxstyling on ebay<br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better. <br></body>","text/html;     charset=utf-8");*/
             
@@ -157,7 +220,8 @@ public class SendMail {
            
             
             //set message body of email
-            String s = "<h:body>Dear Customer:<br><br><br>Thank you for purchasing from automaxstyling on ebay.<br><br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br><br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better.<br><br> Please follow the sample pictures below, and reply via this email to send your photo to us<br><br>Thank you very much!<br><br><br>AutomaxStyling From Ebay</body>";
+            String s = String.format("<h:body>Dear %s <br><br><br>Thank you for purchasing from automaxstyling on ebay.<br><br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br><br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better.<br><br> Please follow the sample pictures below, and reply via this email to send your photo to us<br><br>Thank you very much!"
+            		+ "<br><br><br>AutomaxStyling From Ebay</body>", emails.get(i).toString().substring(emails.get(i).toString().indexOf(",")+1) );
      
           
             
@@ -220,7 +284,7 @@ public class SendMail {
             
         }
 
- /*   }*/
+    }
         
         
         
