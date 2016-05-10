@@ -43,7 +43,7 @@ public class SendMail {
     
     //np
     
-    final String password="************"; 
+    final String password="****"; 
     
     //arraylist to store emails with emailid , customer id , invoice #
    public static ArrayList emails = new ArrayList();
@@ -70,7 +70,7 @@ public class SendMail {
     	//To read input ASINs as excel formatt and parse into java, stored as arrayList
     	
     	 // Location of the source file
-       String sourceFilePath = "c:\\email5.xls";
+       String sourceFilePath = "c:\\email7.xls";
          
        FileInputStream fileInputStream = null;
          
@@ -144,7 +144,9 @@ public class SendMail {
     	   
     	   emails.add(excelData.get(i).toString().substring(1, excelData.get(i).toString().length()-1));
     	   
-    	 System.out.println(emails.get(i));
+    	   
+    	   
+    	 /*System.out.println(emails.get(i));*/
     	   
     	   
     	/*  emailid.add(emails.get(i).toString().substring(0,emails.get(i).toString().indexOf(",")));
@@ -208,17 +210,17 @@ public class SendMail {
     	   
     
        
-/* 
-       new SendMail(emails);*/
+
+       new SendMail(emails);
        
    
        
- /*      String emailtitlemessage = String.format("Nice Photo for $15 Partial Refund Ebay Invoice # %.0f\n", 
+    /* String emailtitlemessage = String.format("Nice Photo for $15 Partial Refund Ebay Invoice # %.0f\n", 
     		   Double.parseDouble(invoice.get(0).toString()));
        
        
-       System.out.println(emailtitlemessage);
-     */
+       System.out.println(emailtitlemessage);*/
+     
        
      
     }
@@ -269,7 +271,7 @@ public class SendMail {
             
             
             String emailtitlemessage = String.format("Nice Photo for $15 Partial Refund Ebay Invoice # %.0f\n", 
-         		   Double.parseDouble(invoice.get(0).toString()));
+         		   Double.parseDouble(invoice.get(i).toString()));
             
             
             
