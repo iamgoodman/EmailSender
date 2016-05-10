@@ -1,6 +1,7 @@
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.*;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -41,7 +43,7 @@ public class SendMail {
     
     //np
     
-    final String password="****"; 
+    final String password="************"; 
     
     //arraylist to store emails with emailid , customer id , invoice #
    public static ArrayList emails = new ArrayList();
@@ -55,7 +57,7 @@ public class SendMail {
    //arraylist to store customerid only in customers bundle 
    public static ArrayList customerid = new ArrayList<String>();
    
-    
+                                                                                      
    /*      //arraylist to store emails only in emails bundle for testing
    public static ArrayList emailid = new ArrayList<String>();
    */
@@ -68,7 +70,7 @@ public class SendMail {
     	//To read input ASINs as excel formatt and parse into java, stored as arrayList
     	
     	 // Location of the source file
-       String sourceFilePath = "c:\\email4.xls";
+       String sourceFilePath = "c:\\email5.xls";
          
        FileInputStream fileInputStream = null;
          
@@ -193,12 +195,30 @@ public class SendMail {
     		   
     	   }
        */
+       
+       
+   /*    
+       for(int i = 0; i< invoice.size(); i++){
+    	   
+    	   
+    	  System.out.println(invoice.get(i));
+    	   
+    	   
+       }*/
     	   
     
        
- 
-       new SendMail(emails);
+/* 
+       new SendMail(emails);*/
        
+   
+       
+ /*      String emailtitlemessage = String.format("Nice Photo for $15 Partial Refund Ebay Invoice # %.0f\n", 
+    		   Double.parseDouble(invoice.get(0).toString()));
+       
+       
+       System.out.println(emailtitlemessage);
+     */
        
      
     }
@@ -241,16 +261,27 @@ public class SendMail {
                  
                  InternetAddress.parse(emails.get(i).toString().substring(0,emails.get(i).toString().indexOf(","))));
        
-            //set title message, remove the trailing zeroes of invoice list
             
-            String emailtitlemessage = String.format("Nice Photo for $15 Partial Refund Ebay Invoice # %s ", 
-            		invoice.get(i).toString().indexOf(".") < 0 ? invoice.get(i).toString() :invoice.get(i).toString().replaceAll("0*$", "").replaceAll("\\.$", ""));
+     
+            
+            
+            //set title message, remove the scientific notation
+            
+            
+            String emailtitlemessage = String.format("Nice Photo for $15 Partial Refund Ebay Invoice # %.0f\n", 
+         		   Double.parseDouble(invoice.get(0).toString()));
+            
+            
+            
+            System.out.println(emailtitlemessage + "This message is ready to be send ");
+            
             
             message.setSubject(emailtitlemessage);
            
+         
             
             //set message body of email, make a part of message bold and red
-            String bodymessageinput = String.format("<h:body>Dear %s <br><br><br>Thank you for purchasing from automaxstyling on ebay.<br><br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br><br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better.<br><br><b><i><font color=\"red\"> Please follow the sample pictures in the attachment below, and reply via this email to send your photo to us</font></i></b><br><br>Thank you very much!"
+            String bodymessageinput = String.format("<h:body>Dear %s <br><br><br>Thank you for purchasing from automaxstyling on ebay.<br><br> We would like to offer you $15 partial refund if you can send us a picture to illustrate our Tonneau Cover on your car.<br><br> The picture should be taken under bright lighting without flash. Please set your picture size to 2M or or larger, and set the resolution to 180dpi or better.<br><br><b><i><font color=\"red\"> Please follow the sample pictures in the attachment below, and reply this email to send your photo to us</font></i></b><br><br>Thank you very much!"
             		+ "<br><br><br>AutomaxStyling From Ebay</body>", customerid.get(i) );
      
            /* emails.get(i).toString().substring(emails.get(i).toString().indexOf(",")+1*/
@@ -300,7 +331,8 @@ public class SendMail {
             
             
             Transport.send(message);
-            System.out.println("Done");
+            
+            System.out.println( message+"Send");
             
             
         }catch(MessagingException
