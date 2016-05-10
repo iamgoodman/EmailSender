@@ -43,7 +43,7 @@ public class SendMail {
     
     //np
     
-    final String password="****"; 
+    final String password="*****"; 
     
     //arraylist to store emails with emailid , customer id , invoice #
    public static ArrayList emails = new ArrayList();
@@ -70,7 +70,7 @@ public class SendMail {
     	//To read input ASINs as excel formatt and parse into java, stored as arrayList
     	
     	 // Location of the source file
-       String sourceFilePath = "c:\\email7.xls";
+       String sourceFilePath = "c:\\email8.xls";
          
        FileInputStream fileInputStream = null;
          
@@ -334,7 +334,9 @@ public class SendMail {
             
             Transport.send(message);
             
-            System.out.println( message+"Send");
+          
+            
+            System.out.println( message+"has been Send");
             
             
         }catch(MessagingException
@@ -349,6 +351,10 @@ public class SendMail {
         }
 
     }
+      
+      
+      System.out.println("all emails send ");
+      
         
         }
         
