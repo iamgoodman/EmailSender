@@ -43,7 +43,7 @@ public class SendMail {
     
     //np
     
-    final String password="*****"; 
+    final String password="nicephoto"; 
     
     //arraylist to store emails with emailid , customer id , invoice #
    public static ArrayList emails = new ArrayList();
@@ -76,6 +76,8 @@ public class SendMail {
          
        // Array List to store the excel sheet data
        ArrayList excelData = new ArrayList();
+       
+       
        
 
          
@@ -133,8 +135,22 @@ public class SendMail {
            }
        }
        
+     
        
-   
+  /*     
+       //remove emails we do not want to send.
+       for(int i = 0; i< excelData.size(); i++)
+       {
+           
+    	   if(excelData.get(i).toString().contains("****"))
+    	   {
+    	   excelData.remove(i);
+           
+    	   }
+           
+           
+       }
+   */
     
        //remove the curl brackets in the exceldata arraylist.
        for(int i = 0; i <excelData.size();i++)	
@@ -345,9 +361,7 @@ public class SendMail {
         	
         	
             throw new RuntimeException(messageException);
-            
-            
-            
+                            
         }
 
     }
