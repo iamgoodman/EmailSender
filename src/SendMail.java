@@ -43,7 +43,7 @@ public class SendMail {
     
     //np
     
-    final String password="nicephoto"; 
+    final String password="*****"; 
     
     //arraylist to store emails with emailid , customer id , invoice #
    public static ArrayList emails = new ArrayList();
